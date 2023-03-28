@@ -1,0 +1,25 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    background-color: aqua;
+    padding: 15px;
+    height: 100vh;
+}
+
+.task-table {
+    width: 1400px;
+    min-height: 70vh;
+    background-color: azure;
+    padding: 30px;
+}
+
+h1 {
+    font-size: 60px;
+    margin-bottom: 20px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+h2 {
+    font-size: 30px;
+}
