@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import Form from '../Form/Form';
+import Modal from '../Modal/Modal';
 import TabsPanel from '../TabsPanel/TabsPanel';
 import TaskList from '../TaskList/TaskList';
+import MyButton from '../UI/MyButton/MyButton';
+import Utils from '../Utils/Utils';
 import './App.css';
 
 const TASKS = [
@@ -29,7 +33,7 @@ const TASKS_STATUS = {
 };
 
 const LINKS = ['Active', 'Done', 'Archived'];
-const BUTTONS = ['Edit', 'Deleate', 'Done', 'Archive'];
+const BUTTONS = ['Edit', 'Delete', 'Done', 'Archive'];
 
 class App extends Component {
   constructor(props) {
@@ -37,36 +41,9 @@ class App extends Component {
     this.state = {
       tasks: TASKS,
       filterBy: 'active',
+      modalView: false,
     };
   }
-
-  static isEqual(obj1, obj2) {
-    const props1 = Object.getOwnPropertyNames(obj1);
-    const props2 = Object.getOwnPropertyNames(obj2);
-
-    if (props1.length !== props2.length) {
-      return false;
-    }
-
-    for (let i = 0; i < props1.length; i += 1) {
-      const prop = props1[i];
-
-      if (obj1[prop] !== obj2[prop]) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  static checkTask = (task, buttonsArr) => {
-    if (task.isDone === true && task.isArchived === false) {
-      return [...buttonsArr.slice(0, 2), ...buttonsArr.slice(-1)];
-    } else if (task.isArchived === true) {
-      return [...buttonsArr.slice(0, 2), 'Unarchive'];
-    } else {
-      return buttonsArr;
-    }
-  };
 
   getFilteredTasks = () =>
     this.state.tasks.filter((t) => {
@@ -74,8 +51,7 @@ class App extends Component {
         t.isDone !== undefined
           ? { isDone: t.isDone, isArchived: t.isArchived }
           : { isArchived: t.isArchived };
-      // console.log('getFilteredTasks worked');
-      return App.isEqual(obj, TASKS_STATUS[this.state.filterBy]);
+      return Utils.isEqual(obj, TASKS_STATUS[this.state.filterBy]);
     });
 
   changeFilter = (filter) => {
@@ -86,24 +62,21 @@ class App extends Component {
     this.setState((state) => {
       const res = state.tasks.find((el) => el.id == id);
       const otherRes = state.tasks.filter((el) => el.id != id);
-      
+
       //check if archived
       if (res.isDone === undefined) {
         res.isDone = false;
         res.isArchived = false;
-        const newState = [...otherRes, res];
-        return { tasks: newState };
-      }
-
-      //check if done or if active
-      if (res.isDone || res.isDone === false) {
+        //check if done or if active
+      } else {
         delete res.isDone;
         res.isArchived = true;
-        const newState = [...otherRes, res];
-        return { tasks: newState };
       }
+      const newState = [...otherRes, res];
+      return { tasks: newState };
     });
   };
+
   moveToDone = (id) => {
     this.setState((state) => {
       const res = state.tasks.find((el) => el.id == id);
@@ -115,12 +88,28 @@ class App extends Component {
     });
   };
 
+  deleteTask = (id) => {
+    this.setState((state) => {
+      const newState = state.tasks.filter((el) => el.id != id);
+      return { tasks: newState };
+    });
+  };
+
+  toggleModal = () => {
+    this.setState((state) => ({ modalView: !state.modalView }));
+  };
+
+  addTask = (post) => {
+    this.setState({ tasks: [...this.state.tasks, post] });
+    this.setState({ modalView: false });
+  };
+
   render() {
     const filteredTasks = this.getFilteredTasks();
     console.log(filteredTasks);
 
     const filteredButtons = filteredTasks.length
-      ? App.checkTask(filteredTasks[0], BUTTONS)
+      ? Utils.checkTask(filteredTasks[0], BUTTONS)
       : [];
     // console.log(filteredButtons);
 
@@ -128,6 +117,11 @@ class App extends Component {
       <div className='wrapper'>
         <div className='task-table'>
           <h1>Tasker</h1>
+
+          <MyButton onClick={this.toggleModal}>Add new task</MyButton>
+          <Modal visible={this.state.modalView} toggle={this.toggleModal}>
+            <Form add={this.addTask}></Form>
+          </Modal>
           <TabsPanel links={LINKS} change={this.changeFilter}></TabsPanel>
           {filteredTasks.length ? (
             <TaskList
@@ -135,6 +129,7 @@ class App extends Component {
               buttons={filteredButtons}
               move_arch={this.moveArchive}
               move_done={this.moveToDone}
+              del={this.deleteTask}
             ></TaskList>
           ) : (
             <div>

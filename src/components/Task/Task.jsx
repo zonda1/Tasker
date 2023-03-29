@@ -1,18 +1,26 @@
 import React from 'react';
 import MyButton from '../UI/MyButton/MyButton';
 
-const Task = ({ task, number, buttons, move_arch, move_done }) => {
+const Task = ({ task, number, buttons, move_arch, move_done,del }) => {
   const { title, body, id } = task;
 
   const getTaskId = (e) => {
     const target = e.target;
     const taskId = target.id;
     const buttonName = target.innerHTML;
-    if (buttonName === 'Unarchive' || buttonName === 'Archive') {
-      move_arch(taskId);
-    }
-    if (buttonName === 'Done') {
-      move_done(taskId);
+    switch (buttonName) {
+      case 'Unarchive':
+      case 'Archive':
+        move_arch(taskId);
+        break;
+      case 'Done':
+        move_done(taskId);
+        break;
+      case 'Delete':
+        del(taskId);
+        break;
+      default:
+        break;
     }
   };
 
