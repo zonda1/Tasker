@@ -1,7 +1,7 @@
 import React from 'react';
 import MyButton from '../UI/MyButton/MyButton';
 
-const Task = ({ task, number, buttons, move_arch, move_done,del }) => {
+const Task = ({ task, number, buttons, move_arch, move_done,del,edit }) => {
   const { title, body, id } = task;
 
   const getTaskId = (e) => {
@@ -18,6 +18,9 @@ const Task = ({ task, number, buttons, move_arch, move_done,del }) => {
         break;
       case 'Delete':
         del(taskId);
+        break;
+      case 'Edit':
+        edit(taskId);
         break;
       default:
         break;

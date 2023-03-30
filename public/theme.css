@@ -1,0 +1,24 @@
+
+/* .wrapper[data-theme='light'] {
+    --main-bg-color:aqua;
+    --main-text-color:#000;
+}
+.task-table[data-theme='dark'] {
+    --main-bg-color:green;
+    --main-text-color:#c2dcda;
+} */
+
+.wrapper[data-theme='light'] {
+    --main-bg-color:aqua;
+}
+.task-table[data-theme='light'] {
+    --main-bg-color:azure;
+    --main-text-color:#000;
+}
+.wrapper[data-theme='dark'] {
+    --main-bg-color:#0e1616;
+}
+.task-table[data-theme='dark'] {
+    --main-bg-color:rgb(35, 52, 52);
+    --main-text-color:#c2dcda;
+}

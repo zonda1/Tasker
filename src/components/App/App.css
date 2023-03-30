@@ -1,7 +1,7 @@
 .wrapper {
     display: flex;
     justify-content: center;
-    background-color: aqua;
+    background-color: var(--main-bg-color);
     padding: 15px;
     height: 100vh;
 }
@@ -9,7 +9,7 @@
 .task-table {
     width: 1400px;
     min-height: 70vh;
-    background-color: azure;
+    background-color: var(--main-bg-color);
     padding: 30px;
 }
 

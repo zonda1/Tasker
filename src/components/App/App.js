@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { ThemeContex } from '../../contex/themeContex';
 import Form from '../Form/Form';
 import Modal from '../Modal/Modal';
 import TabsPanel from '../TabsPanel/TabsPanel';
@@ -42,8 +43,11 @@ class App extends Component {
       tasks: TASKS,
       filterBy: 'active',
       modalView: false,
+      theme:'light'
     };
   }
+
+  
 
   getFilteredTasks = () =>
     this.state.tasks.filter((t) => {
@@ -104,6 +108,36 @@ class App extends Component {
     this.setState({ modalView: false });
   };
 
+  editTask = (id) => {
+    const newTaskTitle = prompt('Let\'s make new title');
+    const newTaskBody = prompt('Let\'s make new description');
+    const { tasks} = this.state;
+    const editedTask=tasks.find(t => t.id == id);
+    editedTask.title = newTaskTitle;
+    editedTask.body = newTaskBody;
+    this.setState({tasks});
+  }
+
+  
+  // static contextType=ThemeContex;
+
+  toggleTheme=()=>{
+    this.setState(({theme})=>({
+      theme:theme==='light'?'dark':'light'
+    }))
+    console.log(this.context);
+  }
+
+  componentDidUpdate(prevProps,prevState) {
+    if (prevProps===this.props && prevState===this.state) return;
+    document.querySelector('.wrapper').dataset.theme=this.state.theme;
+    document.querySelector('.task-table').dataset.theme=this.state.theme;
+    document.body.dataset.theme=this.state.theme;
+    console.log(this.context);
+  }
+
+  
+
   render() {
     const filteredTasks = this.getFilteredTasks();
     console.log(filteredTasks);
@@ -114,30 +148,35 @@ class App extends Component {
     // console.log(filteredButtons);
 
     return (
-      <div className='wrapper'>
-        <div className='task-table'>
-          <h1>Tasker</h1>
-
-          <MyButton onClick={this.toggleModal}>Add new task</MyButton>
-          <Modal visible={this.state.modalView} toggle={this.toggleModal}>
-            <Form add={this.addTask}></Form>
-          </Modal>
-          <TabsPanel links={LINKS} change={this.changeFilter}></TabsPanel>
-          {filteredTasks.length ? (
-            <TaskList
-              tasks={filteredTasks}
-              buttons={filteredButtons}
-              move_arch={this.moveArchive}
-              move_done={this.moveToDone}
-              del={this.deleteTask}
-            ></TaskList>
-          ) : (
-            <div>
-              <h2>There're no {this.state.filterBy} tasks</h2>
-            </div>
-          )}
+      <ThemeContex.Provider value={this.state.theme}>
+        {/* <div data-theme={this.context.value} className='wrapper'>
+          <div data-theme={this.context.value} className='task-table'> */}
+        <div data-theme='light' className='wrapper'>
+          <div data-theme='light' className='task-table'>
+            <h1>Tasker</h1>
+            <MyButton onClick={this.toggleTheme}>Change Theme</MyButton>
+            <MyButton onClick={this.toggleModal}>Add new task</MyButton>
+            <Modal visible={this.state.modalView} toggle={this.toggleModal}>
+              <Form add={this.addTask}></Form>
+            </Modal>
+            <TabsPanel links={LINKS} change={this.changeFilter}></TabsPanel>
+            {filteredTasks.length ? (
+              <TaskList
+                tasks={filteredTasks}
+                buttons={filteredButtons}
+                move_arch={this.moveArchive}
+                move_done={this.moveToDone}
+                del={this.deleteTask}
+                edit={this.editTask}
+              ></TaskList>
+            ) : (
+              <div>
+                <h2>There're no {this.state.filterBy} tasks</h2>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+    </ThemeContex.Provider>
     );
   }
 }
