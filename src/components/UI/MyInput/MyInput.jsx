@@ -3,7 +3,7 @@ import './MyInput.css';
 
 const MyInput = ({...props}) => {
     return (
-        <input {...props} className='add__input'/>
+        <input {...props} className='form-control'/>
     );
 };
 
