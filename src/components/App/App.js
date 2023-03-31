@@ -25,13 +25,28 @@ const TASKS = [
   },
   { id: 3, title: 'Sport', body: 'go to swimming pool', isArchived: true },
   { id: 4, title: 'Book', body: 'read a book', isArchived: true },
-  { id: 5, title: 'Walk', body: 'take a walk', isDone: true,
-  isArchived: false},
+  {
+    id: 5,
+    title: 'Walk',
+    body: 'take a walk',
+    isDone: true,
+    isArchived: false,
+  },
   { id: 6, title: 'Market', body: 'buy some fruits', isArchived: true },
-  { id: 7, title: 'Sport', body: 'play football', isDone: true,
-  isArchived: false, },
-  { id: 8, title: 'Travel', body: 'go to resort this summer', isDone: false,
-  isArchived: false, },
+  {
+    id: 7,
+    title: 'Sport',
+    body: 'play football',
+    isDone: true,
+    isArchived: false,
+  },
+  {
+    id: 8,
+    title: 'Travel',
+    body: 'go to resort this summer',
+    isDone: false,
+    isArchived: false,
+  },
 ];
 
 const TASKS_STATUS = {
@@ -41,7 +56,12 @@ const TASKS_STATUS = {
 };
 
 const LINKS = ['Active', 'Done', 'Archived'];
-const BUTTONS = ['Edit', 'Delete', 'Done', 'Archive'];
+const BUTTONS = [
+  { name: 'Edit', class: 'bi-pencil-square' },
+  { name: 'Delete', class: 'bi-trash' },
+  { name: 'Done', class: 'bi-check-square' },
+  { name: 'Archive', class: 'bi-file-earmark-zip' },
+];
 
 class App extends Component {
   constructor(props) {
@@ -159,8 +179,12 @@ class App extends Component {
           <div data-theme='light' className='task-table'>
             <h1>Tasker</h1>
             <div className='edit-panel'>
-              <MyButton onClick={this.toggleModal}>Add new task</MyButton>
-              <MyButton onClick={this.toggleTheme}>Change Theme</MyButton>
+              <MyButton class='btn btn-info' onClick={this.toggleModal}>
+                <i class='bi bi-plus-lg'></i>
+              </MyButton>
+              <MyButton class='btn btn-info' onClick={this.toggleTheme}>
+                {<i class='bi bi-lightbulb-fill'></i>}
+              </MyButton>
             </div>
             <Modal visible={this.state.modalView} toggle={this.toggleModal}>
               <Form add={this.addTask}></Form>

@@ -1,9 +1,8 @@
 import React from 'react';
-import cla from './MyButton.module.css';
 
-const MyButton = ({ children, ...props }) => {
+const MyButton = ({ children,type, ...props }) => {
   return (
-    <button className={cla.edit__button} {...props}>
+    <button type='button' {...props}>
       {children}
     </button>
   );

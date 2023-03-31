@@ -1,9 +1,0 @@
-.edit__button {
-    font-size: 25px;
-    min-width: 120px;
-    padding: 5px;
-    background-color: transparent;
-    border: 1px solid #000;
-    box-shadow: -5px -5px 5px -5px rgba(34, 60, 80, 0.6) inset;
-    margin-right: 15px;
-}

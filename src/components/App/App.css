@@ -1,16 +1,21 @@
 .wrapper {
+    position:absolute;
+    top: 0;
+    bottom: -100vh;
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     background-color: var(--main-bg-color);
     padding: 15px;
-    height: 100vh;
 }
 
 .task-table {
-    width: 1400px;
-    min-height: 70vh;
+    width: 1200px;
     background-color: var(--main-bg-color);
     padding: 30px;
+    box-shadow: 10px 10px 20px -9px rgba(0,0,0,0.75);
 }
 
 .edit-panel {

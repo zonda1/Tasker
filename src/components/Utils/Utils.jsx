@@ -22,7 +22,7 @@ class Utils {
     if (task.isDone === true && task.isArchived === false) {
       return [...buttonsArr.slice(0, 2), ...buttonsArr.slice(-1)];
     } else if (task.isArchived === true) {
-      return [...buttonsArr.slice(0, 2), 'Unarchive'];
+      return [...buttonsArr.slice(0, 2), {name:'Unarchive',class:'bi-folder2-open'}];
     } else {
       return buttonsArr;
     }

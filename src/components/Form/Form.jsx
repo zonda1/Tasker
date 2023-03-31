@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import FormError from '../FormError/FormError';
 import MyButton from '../UI/MyButton/MyButton';
 import MyInput from '../UI/MyInput/MyInput';
+import './Form.css';
 
 class Form extends Component {
   constructor(props) {
@@ -81,13 +82,21 @@ class Form extends Component {
         </div>
         <div className='form-group'>
           <label htmlFor='body'>Description</label>
-          <MyInput
+          <textarea
+            className='form-control'
+            name='body'
+            id='body'
+            value={this.state.body}
+            placeholder='Task body'
+            onChange={this.handleUserInput}
+          ></textarea>
+          {/* <MyInput
             type='text'
             name='body'
             placeholder='Task body'
             value={this.state.body}
             onChange={this.handleUserInput}
-          />
+          /> */}
         </div>
         <MyButton
           type='sumbit'
