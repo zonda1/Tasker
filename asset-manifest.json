@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/tasker/static/css/main.fef04b9c.css",
+    "main.js": "/tasker/static/js/main.a691c61e.js",
+    "static/media/bootstrap-icons.woff?": "/tasker/static/media/bootstrap-icons.6959d0d983ee318f8880.woff",
+    "static/media/bootstrap-icons.woff2?": "/tasker/static/media/bootstrap-icons.b2e5aab643c6f0fd2da6.woff2",
+    "index.html": "/tasker/index.html",
+    "main.fef04b9c.css.map": "/tasker/static/css/main.fef04b9c.css.map",
+    "main.a691c61e.js.map": "/tasker/static/js/main.a691c61e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fef04b9c.css",
+    "static/js/main.a691c61e.js"
+  ]
+}
