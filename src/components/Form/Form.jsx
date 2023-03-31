@@ -73,7 +73,7 @@ class Form extends Component {
           <MyInput
             type='text'
             name='title'
-            requiered
+            requiered='true'
             placeholder='Task title'
             value={this.state.title}
             onChange={this.handleUserInput}

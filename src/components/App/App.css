@@ -13,13 +13,8 @@
     padding: 30px;
 }
 
-h1 {
-    font-size: 60px;
+.edit-panel {
+    display:flex;
+    justify-content: space-between;
     margin-bottom: 20px;
-    text-align: center;
-    text-transform: uppercase;
-}
-
-h2 {
-    font-size: 30px;
 }

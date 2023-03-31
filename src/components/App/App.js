@@ -24,7 +24,14 @@ const TASKS = [
     isArchived: false,
   },
   { id: 3, title: 'Sport', body: 'go to swimming pool', isArchived: true },
-  { id: 4, title: 'Book', body: 'read book', isArchived: true },
+  { id: 4, title: 'Book', body: 'read a book', isArchived: true },
+  { id: 5, title: 'Walk', body: 'take a walk', isDone: true,
+  isArchived: false},
+  { id: 6, title: 'Market', body: 'buy some fruits', isArchived: true },
+  { id: 7, title: 'Sport', body: 'play football', isDone: true,
+  isArchived: false, },
+  { id: 8, title: 'Travel', body: 'go to resort this summer', isDone: false,
+  isArchived: false, },
 ];
 
 const TASKS_STATUS = {
@@ -43,11 +50,9 @@ class App extends Component {
       tasks: TASKS,
       filterBy: 'active',
       modalView: false,
-      theme:'light'
+      theme: 'light',
     };
   }
-
-  
 
   getFilteredTasks = () =>
     this.state.tasks.filter((t) => {
@@ -109,53 +114,54 @@ class App extends Component {
   };
 
   editTask = (id) => {
-    const newTaskTitle = prompt('Let\'s make new title');
-    const newTaskBody = prompt('Let\'s make new description');
-    const { tasks} = this.state;
-    const editedTask=tasks.find(t => t.id == id);
+    const newTaskTitle = prompt("Let's make new title");
+    const newTaskBody = prompt("Let's make new description");
+    const { tasks } = this.state;
+    const editedTask = tasks.find((t) => t.id == id);
     editedTask.title = newTaskTitle;
     editedTask.body = newTaskBody;
-    this.setState({tasks});
-  }
+    this.setState({ tasks });
+  };
 
-  
-  // static contextType=ThemeContex;
-
-  toggleTheme=()=>{
-    this.setState(({theme})=>({
-      theme:theme==='light'?'dark':'light'
-    }))
+  toggleTheme = () => {
+    this.setState(({ theme }) => ({
+      theme: theme === 'light' ? 'dark' : 'light',
+    }));
     console.log(this.context);
-  }
+  };
 
-  componentDidUpdate(prevProps,prevState) {
-    if (prevProps===this.props && prevState===this.state) return;
-    document.querySelector('.wrapper').dataset.theme=this.state.theme;
-    document.querySelector('.task-table').dataset.theme=this.state.theme;
-    document.body.dataset.theme=this.state.theme;
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps === this.props && prevState === this.state) return;
+    document.querySelector('.wrapper').dataset.theme = this.state.theme;
+    document.querySelector('.task-table').dataset.theme = this.state.theme;
+    document.body.dataset.theme = this.state.theme;
     console.log(this.context);
+    localStorage.setItem('items', JSON.stringify(this.state.tasks));
   }
 
-  
+  componentDidMount() {
+    const items = JSON.parse(localStorage.getItem('items'));
+    if (items) {
+      this.setState({ tasks: items });
+    }
+  }
 
   render() {
     const filteredTasks = this.getFilteredTasks();
-    console.log(filteredTasks);
 
     const filteredButtons = filteredTasks.length
       ? Utils.checkTask(filteredTasks[0], BUTTONS)
       : [];
-    // console.log(filteredButtons);
 
     return (
       <ThemeContex.Provider value={this.state.theme}>
-        {/* <div data-theme={this.context.value} className='wrapper'>
-          <div data-theme={this.context.value} className='task-table'> */}
         <div data-theme='light' className='wrapper'>
           <div data-theme='light' className='task-table'>
             <h1>Tasker</h1>
-            <MyButton onClick={this.toggleTheme}>Change Theme</MyButton>
-            <MyButton onClick={this.toggleModal}>Add new task</MyButton>
+            <div className='edit-panel'>
+              <MyButton onClick={this.toggleModal}>Add new task</MyButton>
+              <MyButton onClick={this.toggleTheme}>Change Theme</MyButton>
+            </div>
             <Modal visible={this.state.modalView} toggle={this.toggleModal}>
               <Form add={this.addTask}></Form>
             </Modal>
@@ -176,7 +182,7 @@ class App extends Component {
             )}
           </div>
         </div>
-    </ThemeContex.Provider>
+      </ThemeContex.Provider>
     );
   }
 }
