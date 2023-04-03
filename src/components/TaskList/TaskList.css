@@ -6,13 +6,19 @@
 
 .task-item {
   display: flex;
+  align-items: center;
   border: 2px solid black;
   padding: 10px;
   margin-bottom: 15px;
 }
 
+.task-item .form-check {
+  font-size: 30px;
+  flex: 0 0 5%;
+}
+
 .task-item__descr {
-  flex: 1 1 66.67%;
+  flex: 1 1 55%;
 }
 .task-item__descr p {
   font-size: 25px;
@@ -20,6 +26,6 @@
 
 .task-item__buttons {
   display: flex;
+  justify-content: flex-end;
   align-items: center;
-  flex: 0 0 33.33%;
 }

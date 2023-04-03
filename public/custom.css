@@ -1,7 +1,9 @@
 .btn {
     margin-right: 15px;
 }
-
+.btn.btn-primary  {
+    font-size: 24px;
+}
 
 .btn.btn-info {
     font-size: 24px;
@@ -11,4 +13,24 @@
 .form-control {
     resize: none;
     margin-bottom: 15px;
+}
+
+.edit-panel {
+    display:flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.edit-panel .form-control {
+    flex: 0 1 30%;
+    height: 100%;
+    margin-bottom: 0px;
+} 
+
+.edit-panel button:last-child {
+    margin-left: auto;
+} 
+
+.nav-item {
+    font-size: 40px;
 }

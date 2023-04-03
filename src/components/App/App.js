@@ -7,6 +7,7 @@ import TaskList from '../TaskList/TaskList';
 import MyButton from '../UI/MyButton/MyButton';
 import Utils from '../Utils/Utils';
 import './App.css';
+import MyInput from '../UI/MyInput/MyInput';
 
 const TASKS = [
   {
@@ -57,10 +58,10 @@ const TASKS_STATUS = {
 
 const LINKS = ['Active', 'Done', 'Archived'];
 const BUTTONS = [
-  { name: 'Edit', class: 'bi-pencil-square' },
-  { name: 'Delete', class: 'bi-trash' },
-  { name: 'Done', class: 'bi-check-square' },
-  { name: 'Archive', class: 'bi-file-earmark-zip' },
+  { name: 'Edit', styleClass: 'bi-pencil-square' },
+  { name: 'Delete', styleClass: 'bi-trash' },
+  // { name: 'Done', styleClass: 'bi-check-square' },
+  { name: 'Archive', styleClass: 'bi-file-earmark-zip' },
 ];
 
 class App extends Component {
@@ -71,6 +72,9 @@ class App extends Component {
       filterBy: 'active',
       modalView: false,
       theme: 'light',
+      editedTaskId: '',
+      modalMode: '',
+      query: '',
     };
   }
 
@@ -106,14 +110,17 @@ class App extends Component {
     });
   };
 
-  moveToDone = (id) => {
+  moveToDoneOrToActive = (checked, id) => {
     this.setState((state) => {
       const res = state.tasks.find((el) => el.id == id);
       const otherRes = state.tasks.filter((el) => el.id != id);
-      res.isDone = true;
-      res.isArchived = false;
-      const newState = [...otherRes, res];
-      return { tasks: newState };
+      if (checked) {
+        res.isDone = true;
+      } else {
+        res.isDone = false;
+      }
+
+      return { tasks: [...otherRes, res] };
     });
   };
 
@@ -133,21 +140,29 @@ class App extends Component {
     this.setState({ modalView: false });
   };
 
-  editTask = (id) => {
-    const newTaskTitle = prompt("Let's make new title");
-    const newTaskBody = prompt("Let's make new description");
-    const { tasks } = this.state;
-    const editedTask = tasks.find((t) => t.id == id);
-    editedTask.title = newTaskTitle;
-    editedTask.body = newTaskBody;
-    this.setState({ tasks });
+  getEditedTaksId = (id) => {
+    this.toggleModal();
+    this.setState({ editedTaskId: id, modalMode: 'edit' });
+  };
+
+  editTask = (newTitle, newBody) => {
+    const { tasks, editedTaskId } = this.state;
+    const editedTask = tasks.find((t) => t.id == editedTaskId);
+    const editedTaskIndex = tasks.indexOf(editedTask);
+    editedTask.title = newTitle;
+    editedTask.body = newBody;
+    const newTasks = [
+      ...tasks.slice(0, editedTaskIndex),
+      editedTask,
+      ...tasks.slice(editedTaskIndex + 1),
+    ];
+    this.setState({ tasks: [...newTasks], modalView: false });
   };
 
   toggleTheme = () => {
     this.setState(({ theme }) => ({
       theme: theme === 'light' ? 'dark' : 'light',
     }));
-    console.log(this.context);
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -155,19 +170,24 @@ class App extends Component {
     document.querySelector('.wrapper').dataset.theme = this.state.theme;
     document.querySelector('.task-table').dataset.theme = this.state.theme;
     document.body.dataset.theme = this.state.theme;
-    console.log(this.context);
-    localStorage.setItem('items', JSON.stringify(this.state.tasks));
+    // localStorage.setItem('items', JSON.stringify(this.state.tasks));
   }
 
   componentDidMount() {
-    const items = JSON.parse(localStorage.getItem('items'));
-    if (items) {
-      this.setState({ tasks: items });
-    }
+    // const items = JSON.parse(localStorage.getItem('items'));
+    // if (items) {
+    //   this.setState({ tasks: items });
+    // }
   }
+
+ 
 
   render() {
     const filteredTasks = this.getFilteredTasks();
+
+    const getFilteredByQuery= filteredTasks.filter((t) =>
+      t.title.toLowerCase().includes(this.state.query)
+    );
 
     const filteredButtons = filteredTasks.length
       ? Utils.checkTask(filteredTasks[0], BUTTONS)
@@ -179,25 +199,46 @@ class App extends Component {
           <div data-theme='light' className='task-table'>
             <h1>Tasker</h1>
             <div className='edit-panel'>
-              <MyButton class='btn btn-info' onClick={this.toggleModal}>
-                <i class='bi bi-plus-lg'></i>
+              <MyButton
+                className='btn btn-info'
+                onClick={() => {
+                  this.toggleModal();
+                  this.setState({ modalMode: 'create' });
+                }}
+              >
+                <i className='bi bi-plus-lg'></i>
               </MyButton>
-              <MyButton class='btn btn-info' onClick={this.toggleTheme}>
-                {<i class='bi bi-lightbulb-fill'></i>}
+              <MyInput
+                value={this.state.query}
+                placeholder='Search...'
+                onChange={e => this.setState({query:e.target.value})}
+              ></MyInput>
+              <MyButton className='btn btn-info' onClick={this.toggleTheme}>
+                {<i className='bi bi-lightbulb-fill'></i>}
               </MyButton>
             </div>
             <Modal visible={this.state.modalView} toggle={this.toggleModal}>
-              <Form add={this.addTask}></Form>
+              <Form
+                add={this.addTask}
+                edit={this.editTask}
+                modalMode={this.state.modalMode}
+              ></Form>
             </Modal>
-            <TabsPanel links={LINKS} change={this.changeFilter}></TabsPanel>
-            {filteredTasks.length ? (
+            <TabsPanel
+              links={LINKS}
+              change={this.changeFilter}
+              current={this.state.filterBy}
+            ></TabsPanel>
+            {getFilteredByQuery.length ? (
               <TaskList
-                tasks={filteredTasks}
+                filterBy={this.state.filterBy}
+                tasks={getFilteredByQuery}
                 buttons={filteredButtons}
                 move_arch={this.moveArchive}
-                move_done={this.moveToDone}
+                move_done={this.moveToDoneOrToActive}
                 del={this.deleteTask}
-                edit={this.editTask}
+                edit={this.getEditedTaksId}
+                isChecked={this.state.isChecked}
               ></TaskList>
             ) : (
               <div>

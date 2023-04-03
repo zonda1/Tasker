@@ -16,6 +16,14 @@ class Form extends Component {
     };
   }
 
+  editPost = (e) => {
+    e.preventDefault();
+    if (this.state.formValid) {
+      this.props.edit(this.state.title, this.state.body);
+      this.setState({ title: '', body: '', formValid: false });
+    }
+  };
+
   createPost = (e) => {
     e.preventDefault();
     if (this.state.formValid) {
@@ -26,7 +34,6 @@ class Form extends Component {
         isDone: false,
         isArchived: false,
       };
-      console.log(newPost);
       this.props.add(newPost);
       this.setState({ title: '', body: '', formValid: false });
     }
@@ -90,22 +97,26 @@ class Form extends Component {
             placeholder='Task body'
             onChange={this.handleUserInput}
           ></textarea>
-          {/* <MyInput
-            type='text'
-            name='body'
-            placeholder='Task body'
-            value={this.state.body}
-            onChange={this.handleUserInput}
-          /> */}
         </div>
-        <MyButton
-          type='sumbit'
-          disabled={!this.state.formValid}
-          onClick={this.createPost}
-          className='btn btn-primary'
-        >
-          Add task
-        </MyButton>
+        {this.props.modalMode === 'create' ? (
+          <MyButton
+            type='sumbit'
+            disabled={!this.state.formValid}
+            onClick={this.createPost}
+            className='btn btn-primary'
+          >
+            Add task
+          </MyButton>
+        ) : (
+          <MyButton
+            type='sumbit'
+            disabled={!this.state.formValid}
+            onClick={this.editPost}
+            className='btn btn-primary'
+          >
+            Edit task
+          </MyButton>
+        )}
       </form>
     );
   }

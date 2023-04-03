@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { Component } from 'react';
 import cl from './MyLink.module.css';
 
-const MyLink = ({ children, change }) => {
+class MyLink extends Component {
 
-  const getChangedFilter = (e) => {
-    change((e.target.innerHTML).toLowerCase());
-};
-
-  return (
-    <a className={cl.nav__link} href='#' onClick={getChangedFilter}>
-      {children}
-    </a>
-  );
-};
+  render() {
+    const { children, id, change, isActive } = this.props;
+    return (
+      <li className='nav-item'>
+        <a
+          className={'nav-link' + (isActive === id.toLowerCase() ? ' active' : '')}
+          id={id}
+          href='#'
+          onClick={change}
+        >
+          {children}
+        </a>
+      </li>
+    );
+  }
+}
 
 export default MyLink;

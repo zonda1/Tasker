@@ -18,8 +18,3 @@
     box-shadow: 10px 10px 20px -9px rgba(0,0,0,0.75);
 }
 
-.edit-panel {
-    display:flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
