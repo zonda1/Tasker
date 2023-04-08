@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import MyButton from '../UI/MyButton/MyButton';
 
 const Task = ({
@@ -10,8 +10,25 @@ const Task = ({
   del,
   edit,
   filterBy,
-  isChecked
 }) => {
+  const taskBorders = {
+    active: {
+      border: '#97cba9',
+      background: '',
+      opacity: '',
+    },
+    done: {
+      border: '#680747',
+      background: '',
+      opacity: '',
+    },
+    archived: {
+      border: '#000',
+      background: 'rgba(155, 166, 165, 0.3)',
+      opacity: '0.4',
+    },
+  };
+  const liEl = useRef(null);
   const { title, body, id } = task;
 
   const getTaskId = (e) => {
@@ -21,13 +38,21 @@ const Task = ({
     switch (buttonName) {
       case 'Unarchive':
       case 'Archive':
-        move_arch(taskId);
+        liEl.current.classList.add(
+          'animate__animated',
+          'animate__backOutRight'
+        );
+        setTimeout(() => {
+          liEl.current.classList.remove(
+            'animate__animated',
+            'animate__backOutRight'
+          );
+          return move_arch(taskId);
+        }, 800);
         break;
-      // case 'Done':
-      //   move_done(taskId);
-      //   break;
       case 'Delete':
-        del(taskId);
+        liEl.current.classList.add('animate__animated', 'animate__backOutDown');
+        setTimeout(() => del(taskId), 800);
         break;
       case 'Edit':
         edit(taskId);
@@ -38,7 +63,15 @@ const Task = ({
   };
 
   return (
-    <li className='task-item'>
+    <li
+      className='task-item'
+      style={{
+        borderColor: taskBorders[filterBy].border,
+        backgroundColor: taskBorders[filterBy].background,
+        opacity: taskBorders[filterBy].opacity,
+      }}
+      ref={liEl}
+    >
       {filterBy !== 'archived' ? (
         <div className='form-check'>
           <input
@@ -46,12 +79,21 @@ const Task = ({
             type='checkbox'
             value=''
             id={id}
-            checked={filterBy==='active'?false:true}
-            onChange={e=>move_done(e.target.checked,e.target.id)}
+            checked={filterBy === 'active' ? false : true}
+            onChange={(e) => {
+              liEl.current.classList.add(
+                'animate__animated',
+                'animate__backOutLeft'
+              );
+              setTimeout(() => {
+                liEl.current.classList.remove(
+                  'animate__animated',
+                  'animate__backOutLeft'
+                );
+                return move_done(e.target.checked, e.target.id);
+              }, 800);
+            }}
           ></input>
-          {/* <label class='form-check-label' for='flexCheckDefault'>
-          Default checkbox
-        </label> */}
         </div>
       ) : (
         ''
@@ -71,7 +113,6 @@ const Task = ({
             key={index}
             name={button.name}
             className='btn btn-primary'
-            style={{ width: '70px' }}
             onClick={getTaskId}
           >
             <i className={`bi ${button.styleClass}`}></i>

@@ -73,6 +73,7 @@ class Form extends Component {
   render() {
     return (
       <form>
+        <i className="bi bi-x-lg" onClick={this.props.close}></i>
         <div className='panel panel-default'>
           <FormError formError={this.state.formError}></FormError>
         </div>

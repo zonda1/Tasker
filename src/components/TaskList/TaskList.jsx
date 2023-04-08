@@ -2,7 +2,8 @@ import React from 'react';
 import Task from '../Task/Task';
 import './TaskList.css';
 
-const TaskList = ({ tasks, buttons, move_arch, move_done, del, edit,filterBy,isChecked }) => {
+const TaskList = ({ tasks, buttons, move_arch, move_done, del, edit,filterBy }) => {
+  
   return (
     <div>
       <div className='task-panel'>
@@ -19,7 +20,6 @@ const TaskList = ({ tasks, buttons, move_arch, move_done, del, edit,filterBy,isC
               del={del}
               edit={edit}
               filterBy={filterBy}
-              isChecked={isChecked}
             ></Task>
           ))}
         </ul>

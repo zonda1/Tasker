@@ -1,8 +1,24 @@
+form {
+  display: flex;
+  flex-direction: column;
+}
+
 label {
-  font-size: 20px;
+  font-size: 30px;
+  margin-bottom: 5px;
 }
 
 textarea {
   height: 250px;
   margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+  label {
+    font-size: 20px;
+  }
+  textarea {
+    height: 150px;
+    margin-bottom: 7px;
+  }
 }

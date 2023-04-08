@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import cl from './MyLink.module.css';
 
 class MyLink extends Component {
 

@@ -9,46 +9,6 @@ import Utils from '../Utils/Utils';
 import './App.css';
 import MyInput from '../UI/MyInput/MyInput';
 
-const TASKS = [
-  {
-    id: 1,
-    title: 'Food',
-    body: 'make dinner',
-    isDone: false,
-    isArchived: false,
-  },
-  {
-    id: 2,
-    title: 'Study',
-    body: 'do some homework',
-    isDone: true,
-    isArchived: false,
-  },
-  { id: 3, title: 'Sport', body: 'go to swimming pool', isArchived: true },
-  { id: 4, title: 'Book', body: 'read a book', isArchived: true },
-  {
-    id: 5,
-    title: 'Walk',
-    body: 'take a walk',
-    isDone: true,
-    isArchived: false,
-  },
-  { id: 6, title: 'Market', body: 'buy some fruits', isArchived: true },
-  {
-    id: 7,
-    title: 'Sport',
-    body: 'play football',
-    isDone: true,
-    isArchived: false,
-  },
-  {
-    id: 8,
-    title: 'Travel',
-    body: 'go to resort this summer',
-    isDone: false,
-    isArchived: false,
-  },
-];
 
 const TASKS_STATUS = {
   active: { isDone: false, isArchived: false },
@@ -60,7 +20,6 @@ const LINKS = ['Active', 'Done', 'Archived'];
 const BUTTONS = [
   { name: 'Edit', styleClass: 'bi-pencil-square' },
   { name: 'Delete', styleClass: 'bi-trash' },
-  // { name: 'Done', styleClass: 'bi-check-square' },
   { name: 'Archive', styleClass: 'bi-file-earmark-zip' },
 ];
 
@@ -68,7 +27,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tasks: TASKS,
+      tasks: [],
       filterBy: 'active',
       modalView: false,
       theme: 'light',
@@ -115,11 +74,10 @@ class App extends Component {
       const res = state.tasks.find((el) => el.id == id);
       const otherRes = state.tasks.filter((el) => el.id != id);
       if (checked) {
-        res.isDone = true;
-      } else {
         res.isDone = false;
+      } else {
+        res.isDone = true;
       }
-
       return { tasks: [...otherRes, res] };
     });
   };
@@ -133,6 +91,10 @@ class App extends Component {
 
   toggleModal = () => {
     this.setState((state) => ({ modalView: !state.modalView }));
+  };
+
+  closeModal = () => {
+    this.setState((state) => ({ modalView: false }));
   };
 
   addTask = (post) => {
@@ -170,22 +132,20 @@ class App extends Component {
     document.querySelector('.wrapper').dataset.theme = this.state.theme;
     document.querySelector('.task-table').dataset.theme = this.state.theme;
     document.body.dataset.theme = this.state.theme;
-    // localStorage.setItem('items', JSON.stringify(this.state.tasks));
+    localStorage.setItem('items', JSON.stringify(this.state.tasks));
   }
 
   componentDidMount() {
-    // const items = JSON.parse(localStorage.getItem('items'));
-    // if (items) {
-    //   this.setState({ tasks: items });
-    // }
+    const items = JSON.parse(localStorage.getItem('items'));
+    if (items) {
+      this.setState({ tasks: items });
+    }
   }
-
- 
 
   render() {
     const filteredTasks = this.getFilteredTasks();
 
-    const getFilteredByQuery= filteredTasks.filter((t) =>
+    const getFilteredByQuery = filteredTasks.filter((t) =>
       t.title.toLowerCase().includes(this.state.query)
     );
 
@@ -211,7 +171,7 @@ class App extends Component {
               <MyInput
                 value={this.state.query}
                 placeholder='Search...'
-                onChange={e => this.setState({query:e.target.value})}
+                onChange={(e) => this.setState({ query: e.target.value })}
               ></MyInput>
               <MyButton className='btn btn-info' onClick={this.toggleTheme}>
                 {<i className='bi bi-lightbulb-fill'></i>}
@@ -222,6 +182,7 @@ class App extends Component {
                 add={this.addTask}
                 edit={this.editTask}
                 modalMode={this.state.modalMode}
+                close={this.closeModal}
               ></Form>
             </Modal>
             <TabsPanel
@@ -238,7 +199,6 @@ class App extends Component {
                 move_done={this.moveToDoneOrToActive}
                 del={this.deleteTask}
                 edit={this.getEditedTaksId}
-                isChecked={this.state.isChecked}
               ></TaskList>
             ) : (
               <div>
