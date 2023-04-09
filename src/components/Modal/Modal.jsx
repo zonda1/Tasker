@@ -9,7 +9,7 @@ const Modal = ({ children, visible, toggle }) => {
   }
 
   return (
-    <div className={rootClasses.join(' ')} onClick={() => toggle()}>
+    <div className={rootClasses.join(' ')} onClick={() => toggle()} >
       <div
         className={`${cl.modal} animate__animated animate__bounce`}
         onClick={(e) => e.stopPropagation()}

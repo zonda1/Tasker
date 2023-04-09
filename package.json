@@ -1,7 +1,7 @@
 {
   "name": "tasker_class",
   "version": "0.1.0",
-  "homepage":"https://zonda1.github.io/tasker-v2/",
+  "homepage":"https://zonda1.github.io/tasker-v3/",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",

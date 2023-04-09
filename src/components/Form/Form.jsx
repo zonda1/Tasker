@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import FormError from '../FormError/FormError';
 import MyButton from '../UI/MyButton/MyButton';
 import MyInput from '../UI/MyInput/MyInput';
@@ -14,13 +14,19 @@ class Form extends Component {
       titleValid: false,
       formValid: false,
     };
+    this.formEl = createRef();
   }
 
   editPost = (e) => {
     e.preventDefault();
     if (this.state.formValid) {
       this.props.edit(this.state.title, this.state.body);
-      this.setState({ title: '', body: '', formValid: false });
+      this.setState({
+        title: '',
+        body: '',
+        formValid: false,
+        titleValid: false,
+      });
     }
   };
 
@@ -35,7 +41,12 @@ class Form extends Component {
         isArchived: false,
       };
       this.props.add(newPost);
-      this.setState({ title: '', body: '', formValid: false });
+      this.setState({
+        title: '',
+        body: '',
+        formValid: false,
+        titleValid: false,
+      });
     }
   };
 
@@ -72,8 +83,8 @@ class Form extends Component {
 
   render() {
     return (
-      <form>
-        <i className="bi bi-x-lg" onClick={this.props.close}></i>
+      <form ref={this.formEl}>
+        <i className='bi bi-x-lg' onClick={this.props.close}></i>
         <div className='panel panel-default'>
           <FormError formError={this.state.formError}></FormError>
         </div>
